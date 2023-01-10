@@ -1,0 +1,73 @@
+AWSTemplateFormatVersion:  "2010-09-09"
+Description:  "Todoist lambda function to catch reminders"
+
+Parameters:
+
+  BucketLambdaSource:
+    Type: "String"
+    Description:  "Name of the lambda to store the source code when packaging the stack"
+
+  TodoistCode:
+    Type: "String"
+    Description:  "Todoist code to access the API"
+
+
+
+Resources:
+
+  LambdaSourceBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: !Ref "BucketLambdaSource"
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
+
+  LambdaExecutionRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+        - Effect: "Allow"
+          Principal:
+            Service:
+            - "lambda.amazonaws.com"
+          Action:
+            - "sts:AssumeRole"
+      Path: "/"
+      Policies:
+      - PolicyName: "root"
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: "Allow"
+            Action:
+            - "logs:*"
+            Resource: "arn:aws:logs:*:*:*"
+
+  ReminderLambda:
+    Type: "AWS::Lambda::Function"
+    Properties:
+      Handler: "index.lambdaHandler"
+      Runtime: "nodejs18.x"
+      Role: !GetAtt "LambdaExecutionRole.Arn"
+      Code: "./dist/index.js"
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
+
+  ReminderLambdaURL:
+    Type: "AWS::Lambda::Url"
+    Properties:
+      AuthType: "NONE"
+      TargetFunctionArn: !GetAtt "ReminderLambda.Arn"
+
+  ReminderLambdaUrlPermission:
+    Type: "AWS::Lambda::Permission"
+    Properties:
+      FunctionName: !Ref "ReminderLambda"
+      Action: "lambda:InvokeFunctionUrl"
+      Principal: "*"
+      FunctionUrlAuthType: "NONE"
+      
