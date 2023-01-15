@@ -6,13 +6,22 @@ CMD=docker run -it --rm -v $(PWD):$(CONTAINER_ROOT) -w $(CONTAINER_ROOT) -u node
 AWSCLI=docker run -it --rm -v $(PWD):/src -w /src -v $(PWD)/aws:/root/.aws amazon/aws-cli
 
 build:
-	docker build --rm . -t todoist
+	docker build --rm --no-cache . -t todoist
 
 log:
 	$(CMD) sh
 
+compile:
+	$(CMD) tsc
+
 watch:
 	$(CMD) tsc -w
+
+watch-test:
+	$(CMD) npm run test
+
+clean:
+	rm -rf dist/*
 
 create-lambda-stack: infrastructure/packaged-lambda.yml
 	$(AWSCLI) cloudformation create-stack --stack-name TodoistLambdaStack \
