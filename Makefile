@@ -2,7 +2,9 @@
 
 include make.env
 CONTAINER_ROOT=/home/node/src
-CMD=docker run -it --rm -v $(PWD):$(CONTAINER_ROOT) -w $(CONTAINER_ROOT) -u node todoist
+DOCKER_RUN=docker run -it --rm -v $(PWD):$(CONTAINER_ROOT) -w $(CONTAINER_ROOT) -u node 
+IMAGE=todoist
+CMD=$(DOCKER_RUN) $(IMAGE)
 AWSCLI=docker run -it --rm -v $(PWD):/src -w /src -v $(PWD)/aws:/root/.aws amazon/aws-cli
 
 build:
@@ -17,8 +19,8 @@ compile:
 watch:
 	$(CMD) tsc -w
 
-watch-test:
-	$(CMD) npm run test
+tdd:
+	$(DOCKER_RUN) --env GIT_WORK_TREE=$(GIT_WORK_TREE) --env GIT_DIR=$(GIT_DIR) $(IMAGE) npm run test
 
 clean:
 	rm -rf dist/*

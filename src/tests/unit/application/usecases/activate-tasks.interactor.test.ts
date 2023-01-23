@@ -9,10 +9,7 @@ import { ITask, Task } from '../../../../domain/entities/task'
 
 const getMockedInputPort = (): ActivateTasksInputPort => {
         return  {
-           tasks: [{ id: 'dummy-task', isActivated: false }],
-           getTasksToActivate: () => {
-                return [ new Task('dummy-task') ];
-           }
+           tasksToActivate: [ new Task('dummy-task') ]
         };
 };
 
@@ -36,21 +33,32 @@ const getMockedGateway =
 }
 
 describe('Activate Tasks Interactor', () => {
-    const inputPort: ActivateTasksInputPort = getMockedInputPort();
-    const outputPort: ActivateTasksOutputPort = getMockedOutputPort();
-    const gateway: ActivateTasksGateway = getMockedGateway();
-
-    const interactor = new ActivateTasksInteractor(
-        inputPort, outputPort, gateway
-    );
-
     test('is activating all the tasks', async () => {
+        const inputPort: ActivateTasksInputPort = getMockedInputPort();
+        const outputPort: ActivateTasksOutputPort = getMockedOutputPort();
+        const gateway: ActivateTasksGateway = getMockedGateway();
+
+        const interactor = new ActivateTasksInteractor(
+            inputPort, outputPort, gateway
+        );
+
         const outputPortWithTasks = await interactor.activateAllTasks();
         expect(outputPortWithTasks.tasks.length).toBe(1);
         outputPortWithTasks.tasks.forEach((task: Task) => {
             expect(task.isActivated).toBe(true);
         });
         expect(gateway.saveAllTasksActivationState).toHaveBeenCalled();
+    });
+
+    test('throw an error if the update is not successful', async () => {
+        const inputPort: ActivateTasksInputPort = getMockedInputPort();
+        const outputPort: ActivateTasksOutputPort = getMockedOutputPort();
+        const gateway: ActivateTasksGateway = getMockedGateway(false);
+
+        const interactor = new ActivateTasksInteractor(
+            inputPort, outputPort, gateway
+        );
+        await expect(interactor.activateAllTasks()).rejects.toThrow();
     });
 });
 

@@ -1,8 +1,7 @@
 import { ITask, Task } from '../../domain/entities/task';
 
 export interface ActivateTasksInputPort {
-    tasks: ITask[];
-    getTasksToActivate(): Task[];
+    tasksToActivate: Task[];
 }
 
 export interface ActivateTasksOutputPort {
@@ -26,7 +25,7 @@ export class ActivateTasksInteractor {
     ) {}
 
     public async activateAllTasks(): Promise<ActivateTasksOutputPort> {
-        const tasksToActivate: Task[] = this.inputPort.getTasksToActivate();
+        const tasksToActivate: Task[] = this.inputPort.tasksToActivate;
         this.outputPort.tasks = tasksToActivate.map(task => { 
             task.isActivated = true; 
             return task;

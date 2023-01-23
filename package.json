@@ -1,7 +1,7 @@
 {
   "scripts": {
     "watch": "tsc -w",
-    "test": "jest --watchAll"
+    "test": "jest --watch"
   },
   "dependencies": {
     "aws-lambda": "^1.0.7"
