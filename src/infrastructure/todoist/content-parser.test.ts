@@ -1,4 +1,4 @@
-import { TodoistContentParser } from './todoist-content-parser'
+import { TodoistContentParser } from './content-parser'
 
 describe('Toddoist Content Parser', () => {
     test('retrieve the filter from the task content', () => {

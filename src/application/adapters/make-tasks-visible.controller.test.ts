@@ -10,26 +10,13 @@ const getMockedUseCase = (): interactor.DrivingPort => {
     }
 };
 
-const getMockedParser = (): controller.EventParser => {
-    return {
-        parse: jest.fn((event: controller.LambdaEvent): ITask[] => {
-            return [ 
-                { id: '0001', isActivated: false }
-            ];
-        })
-    }
-}
-
 describe('make-tasks-visible Controller', () => {
     test('calls the usecase to make the tasks visible', async () => {
         const usecase = getMockedUseCase();
-        const parser = getMockedParser();
-        const adapter: controller.LambdaAdapter =
-            new controller.LambdaAdapter(usecase, parser);
+        const adapter = new controller.ItaskToTaskAdapter(usecase);
 
-        const event: controller.LambdaEvent = { body: { 'iteam_id': '0001' } };
         const response: interactor.ResponseModel =
-            await adapter.handle(event);
+            await adapter.handle([{ id: '0001' }]);
         expect(usecase.changeVisibility).toBeCalled();
     });
 });

@@ -1,6 +1,5 @@
 export interface ITask {
     id: string;
-    isActivated: boolean;
 }
 
 export class Task implements ITask {

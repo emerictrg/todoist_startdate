@@ -6,25 +6,18 @@ export interface LambdaEvent {
 }
 
 export interface EventParser {
-    parse(event: LambdaEvent): ITask[];
+    parse(event: LambdaEvent): Promise<ITask[]>;
 }
 
-export class LambdaAdapter {
-    constructor(
-        public readonly usecase: interactor.DrivingPort,
-        public readonly parser: EventParser
-    ) {}
+export class ItaskToTaskAdapter {
+    constructor(public readonly usecase: interactor.DrivingPort) {}
 
-    async handle(event: LambdaEvent): Promise<interactor.ResponseModel> {
-        const request = new interactor.RequestModel();
-        request.tasksToActivate = this.transform(event);
-        return await this.usecase.changeVisibility(request);
-    }
-
-    transform(event: LambdaEvent): Task[] {
-        const tasksFromEvents: ITask[] = this.parser.parse(event);
-        return tasksFromEvents.map(itask => {
+    async handle(unknownITasks: ITask[]): Promise<interactor.ResponseModel> {
+       const tasks: Task[] = unknownITasks.map(itask => {
             return new Task(itask.id);
-        });
+       });
+       const request =  new interactor.RequestModel(tasks);
+       return await this.usecase.changeVisibility(request);
     }
 }
+

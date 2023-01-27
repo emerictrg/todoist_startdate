@@ -1,11 +1,15 @@
 import { TodoistApi, Task as TodoistTask } from '@doist/todoist-api-typescript';
-import { Task } from '../domain/entities/task';
+import { Task } from '../../domain/entities/task';
 import { 
     DataGateway,
     DataGatewayResponse
-} from '../application/usecases/make-tasks-visible.interactor';
+} from '../../application/usecases/make-tasks-visible.interactor';
 
-class TodoistGateway implements DataGateway {
+export class TodoistGatewayResponse implements DataGatewayResponse {
+    constructor(public isSuccessfull: boolean, public messages: string[] = []) {}
+}
+
+export class TodoistGateway implements DataGateway {
     private api: TodoistApi;
 
     constructor(configuredApi: TodoistApi) {
@@ -16,15 +20,9 @@ class TodoistGateway implements DataGateway {
         return Promise.all(tasks.map((task: Task)  => {
                 return this.api.updateTask(task.id, { labels: ['next'] });
             })).then((_:  object[]) => {
-                return {
-                    isSuccessfull: true,
-                    messages: []
-                }
+                return new TodoistGatewayResponse(true);
             }).catch(error => {
-                return  {
-                    isSuccessfull: false,
-                    messages: []
-                }
+                return new TodoistGatewayResponse(false);
             });
     }
 }

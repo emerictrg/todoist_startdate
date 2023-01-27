@@ -35,6 +35,7 @@ export class MakeTasksVisible implements DrivingPort {
             task.isActivated = true; 
             return task;
         });
+
         const gatewayResponse =
             await this.gateway.saveState(response.activatedTasks);
         if (!gatewayResponse.isSuccessfull) {
