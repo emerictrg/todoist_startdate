@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion:  "2010-09-09"
+Description:  "Parameters storage. used in the lambda cloudformation"
+
+Resources:
+
+  BucketName:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      AllowedPattern: "[a-zA-Z-_]{3,63}"
+      DataType: "text"
+      Description:  "Bucket name where the source code will stored"
+      Name: "TodoistLambdaBucket"
+      Tags:
+        Application: "Todoist start date"
+      Value: "temp-name"
+      Type: "String"
+    
+  TodoistToken:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      DataType: "text"
+      Description:  "todoist api access token "
+      Name: "TodoistAccessToken"
+      Tags:
+        Application: "Todoist start date"
+      Value: "temp-value"
+      Type: "String"

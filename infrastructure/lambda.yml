@@ -1,24 +1,12 @@
 AWSTemplateFormatVersion:  "2010-09-09"
 Description:  "Todoist lambda function to catch reminders"
 
-Parameters:
-
-  BucketLambdaSource:
-    Type: "String"
-    Description:  "Name of the lambda to store the source code when packaging the stack"
-
-  TodoistCode:
-    Type: "String"
-    Description:  "Todoist code to access the API"
-
-
-
 Resources:
 
   LambdaSourceBucket:
     Type: "AWS::S3::Bucket"
     Properties:
-      BucketName: !Ref "BucketLambdaSource"
+      BucketName: "{{resolve:ssm:TodoistLambdaBucket:2}}"
       Tags:
         - Key: "Application"
           Value: "Todoist start date"
