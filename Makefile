@@ -22,6 +22,9 @@ watch:
 tdd:
 	$(DOCKER_RUN) --env GIT_WORK_TREE=$(GIT_WORK_TREE) --env GIT_DIR=$(GIT_DIR) $(IMAGE) npm run test
 
+tests:
+	$(DOCKER_RUN) --env GIT_WORK_TREE=$(GIT_WORK_TREE) --env GIT_DIR=$(GIT_DIR) $(IMAGE) npm run test-all
+
 clean:
 	rm -rf dist/*
 

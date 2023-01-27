@@ -1,7 +1,7 @@
 import { 
     TodoistTaskIdExtractor,
     TodoistEventData
-} from '../../../infrastructure/todoist-task-id.extractor'
+} from './todoist-task-id.extractor'
 
 describe('Todoist Task Id extractor', () => {
     test('extract the id of the task from the event received', () => {
