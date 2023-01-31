@@ -28,6 +28,14 @@ tests:
 clean:
 	rm -rf dist/*
 
+create-codebuild-stack:
+	$(AWSCLI) cloudformation create-stack --stack-name TodoistCICD \
+		--template-body file://infrastructure/cicd.yml \
+		--capabilities CAPABILITY_NAMED_IAM
+
+delete-codebuild-stack:
+	$(AWSCLI) cloudformation delete-stack --stack-name TodoistCICD
+
 create-parameters-stack:
 	$(AWSCLI) cloudformation create-stack --stack-name TodoistParametersStack \
 		--template-body file://infrastructure/parameters-store.yml

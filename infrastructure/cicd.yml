@@ -1,0 +1,80 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Todoist start  date project:CICD stack
+
+Resources:
+
+  ImageRepository:
+    Type: "AWS::ECR::Repository"
+    Properties:
+      RepositoryName: "todoist-ci"
+      RepositoryPolicyText:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: "AllowPushPull"
+            Effect: "Allow"
+            Principal:
+              AWS: 
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/todoist"
+            Action:
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+
+  BuilderServiceRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "codebuild.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
+      RoleName: "todoist-codebuilder-role"
+
+  Builder:
+    Type: "AWS::CodeBuild::Project"
+    Properties:
+      Name: "todoist-start-date-ci"
+      Description: "Todoist Project start date continuous integration"
+      Artifacts: 
+        Type: "NO_ARTIFACTS"
+      LogsConfig: 
+        CloudWatchLogs:
+          Status: "ENABLED"
+      Environment:
+        Type: "ARM_CONTAINER"
+        ComputeType: "BUILD_GENERAL1_SMALL"
+        Image: !Sub
+          - "${ImageURI}:Latest"
+          - { "ImageURI": !GetAtt "ImageRepository.RepositoryUri" }
+        ImagePullCredentialsType: "CODEBUILD"
+      Source:
+        Type: "GITHUB"
+        Location: "https://github.com/emerictrg/todoist_startdate.git"
+      ServiceRole: !GetAtt "BuilderServiceRole.Arn"
+      Triggers:
+        BuildType: "BUILD"
+        FilterGroups: 
+          - - Type: "EVENT"
+              Pattern: "PUSH"
+            - Type: "HEAD_REF"
+              Pattern: "^refs/heads/main$"
+            - Type: "ACTOR_ACCOUNT_ID"
+              Pattern: "{{resolve:ssm:TodoistRepoUsername:2}}"
+        Webhook: True
+      Visibility: "PRIVATE"
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
+      
+
+

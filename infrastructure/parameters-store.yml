@@ -25,3 +25,14 @@ Resources:
         Application: "Todoist start date"
       Value: "temp-value"
       Type: "String"
+
+  TodoistGithubActor:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      DataType: "text"
+      Description:  "Github user account - used in codebuild"
+      Name: "TodoistRepoUsername"
+      Tags:
+        Application: "Todoist start date"
+      Value: "temp"
+      Type: "String"

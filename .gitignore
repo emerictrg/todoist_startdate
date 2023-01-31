@@ -1,7 +1,6 @@
 aws
 coverage
 dist/*
-infrastructure/parameters.json
 infrastructure/packaged-lambda.yml
 node_modules
 package-lock.json
