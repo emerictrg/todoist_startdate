@@ -3,27 +3,6 @@ Description: Todoist start  date project:CICD stack
 
 Resources:
 
-  ImageRepository:
-    Type: "AWS::ECR::Repository"
-    Properties:
-      RepositoryName: "todoist-ci"
-      RepositoryPolicyText:
-        Version: "2012-10-17"
-        Statement:
-          - Sid: "AllowPushPull"
-            Effect: "Allow"
-            Principal:
-              AWS: 
-                - !Sub "arn:aws:iam::${AWS::AccountId}:user/todoist"
-            Action:
-              - "ecr:GetDownloadUrlForLayer"
-              - "ecr:BatchGetImage"
-              - "ecr:BatchCheckLayerAvailability"
-              - "ecr:PutImage"
-              - "ecr:InitiateLayerUpload"
-              - "ecr:UploadLayerPart"
-              - "ecr:CompleteLayerUpload"
-
   BuilderServiceRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -53,9 +32,7 @@ Resources:
       Environment:
         Type: "ARM_CONTAINER"
         ComputeType: "BUILD_GENERAL1_SMALL"
-        Image: !Sub
-          - "${ImageURI}:Latest"
-          - { "ImageURI": !GetAtt "ImageRepository.RepositoryUri" }
+        Image: "aws/codebuild/amazonlinux2-aarch64-standard:2.0"
         ImagePullCredentialsType: "CODEBUILD"
       Source:
         Type: "GITHUB"

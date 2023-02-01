@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo Install phase
+      - curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+      - . ~/.nvm/nvm.sh
+      - nvm install --lts
+      - npm install -g npm@latest
+      - npm install -g typescript
+
+  pre_build:
+    commands:
+      - echo PREBUILD phase
+      
+  build:
+    commands:
+      - echo Build phase
+      - npm run test-all
+
+  post_build:
+    commands:
+      - echo POSTBUILD phase
