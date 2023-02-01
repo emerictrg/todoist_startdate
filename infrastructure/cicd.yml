@@ -71,8 +71,6 @@ Resources:
               Pattern: "PUSH"
             - Type: "HEAD_REF"
               Pattern: "^refs/heads/main$"
-            - Type: "ACTOR_ACCOUNT_ID"
-              Pattern: "{{resolve:ssm:TodoistRepoUsername:3}}"
         Webhook: True
       Visibility: "PRIVATE"
       Tags:
