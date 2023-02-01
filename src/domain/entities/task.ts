@@ -1,17 +1,17 @@
 export interface ITask {
-    id: string;
+  id: string;
 }
 
 export class Task implements ITask {
-    private readonly _id: string;
-    public isActivated: boolean;
+  private readonly _id: string;
+  public isActivated: boolean;
 
-    constructor(id: string) {
-        this._id = id;
-        this.isActivated = false;
-    }
+  constructor(id: string) {
+    this._id = id;
+    this.isActivated = false;
+  }
 
-    get id()  {
-        return this._id;
-    }
+  get id() {
+    return this._id;
+  }
 }

@@ -1,23 +1,20 @@
-import * as interactor from '../usecases/make-tasks-visible.interactor'
-import * as controller from './make-tasks-visible.controller'
-import { ITask } from '../../domain/entities/task'
+import * as interactor from "../usecases/make-tasks-visible.interactor";
+import * as controller from "./make-tasks-visible.controller";
 
 const getMockedUseCase = (): interactor.DrivingPort => {
-    return {
-        changeVisibility: jest.fn((request: interactor.RequestModel) =>  {
-            return Promise.resolve(new interactor.ResponseModel());
-        })
-    }
+  return {
+    changeVisibility: jest.fn((_: interactor.RequestModel) => {
+      return Promise.resolve(new interactor.ResponseModel());
+    }),
+  };
 };
 
-describe('make-tasks-visible Controller', () => {
-    test('calls the usecase to make the tasks visible', async () => {
-        const usecase = getMockedUseCase();
-        const adapter = new controller.ItaskToTaskAdapter(usecase);
+describe("make-tasks-visible Controller", () => {
+  test("calls the usecase to make the tasks visible", async () => {
+    const usecase = getMockedUseCase();
+    const adapter = new controller.ItaskToTaskAdapter(usecase);
 
-        const response: interactor.ResponseModel =
-            await adapter.handle([{ id: '0001' }]);
-        expect(usecase.changeVisibility).toBeCalled();
-    });
+    await adapter.handle([{ id: "0001" }]);
+    expect(usecase.changeVisibility).toBeCalled();
+  });
 });
-
