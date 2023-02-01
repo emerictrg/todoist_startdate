@@ -38,6 +38,10 @@ update-codebuild-stack:
 		--template-body file://infrastructure/cicd.yml \
 		--capabilities CAPABILITY_NAMED_IAM
 
+log-to-ecr:
+	$(AWSCLI) ecr get-login-password --region eu-west-1 \
+		| docker login --username AWS --password-stdin $(AWS_ACCCOUNT_ID).dkr.ecr.eu-west-1.amazonaws.com
+
 create-parameters-stack:
 	$(AWSCLI) cloudformation create-stack --stack-name TodoistParametersStack \
 		--template-body file://infrastructure/parameters-store.yml
