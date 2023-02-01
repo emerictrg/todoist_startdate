@@ -33,8 +33,10 @@ create-codebuild-stack:
 		--template-body file://infrastructure/cicd.yml \
 		--capabilities CAPABILITY_NAMED_IAM
 
-delete-codebuild-stack:
-	$(AWSCLI) cloudformation delete-stack --stack-name TodoistCICD
+update-codebuild-stack:
+	$(AWSCLI) cloudformation update-stack --stack-name TodoistCICD \
+		--template-body file://infrastructure/cicd.yml \
+		--capabilities CAPABILITY_NAMED_IAM
 
 create-parameters-stack:
 	$(AWSCLI) cloudformation create-stack --stack-name TodoistParametersStack \
