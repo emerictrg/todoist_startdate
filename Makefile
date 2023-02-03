@@ -28,12 +28,12 @@ tests:
 clean:
 	rm -rf dist/*
 
-create-codebuild-stack:
+create-cicd-stack:
 	$(AWSCLI) cloudformation create-stack --stack-name TodoistCICD \
 		--template-body file://infrastructure/cicd.yml \
 		--capabilities CAPABILITY_NAMED_IAM
 
-update-codebuild-stack:
+update-cicd-stack:
 	$(AWSCLI) cloudformation update-stack --stack-name TodoistCICD \
 		--template-body file://infrastructure/cicd.yml \
 		--capabilities CAPABILITY_NAMED_IAM

@@ -77,5 +77,13 @@ Resources:
         - Key: "Application"
           Value: "Todoist start date"
       
+  Deployment:
+    Type: "AWS::CodeDeploy::Application"
+    Properties:
+      ApplicationName: "TodoistStartDate"
+      ComputePlatform: "Lambda"
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
 
 
