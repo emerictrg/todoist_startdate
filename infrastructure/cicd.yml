@@ -41,6 +41,7 @@ Resources:
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
         - "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+        - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
       RoleName: "todoist-codebuilder-role"
 
   Builder:
@@ -49,7 +50,7 @@ Resources:
       Name: "todoist-start-date-ci"
       Description: "Todoist Project start date continuous integration"
       Artifacts: 
-        Type: "NO_ARTIFACTS"
+        Type: "CODEPIPELINE"
       LogsConfig: 
         CloudWatchLogs:
           Status: "ENABLED"
@@ -61,17 +62,8 @@ Resources:
           - { "ImageURI": !GetAtt "ImageRepository.RepositoryUri" }
         ImagePullCredentialsType: "CODEBUILD"
       Source:
-        Type: "GITHUB"
-        Location: "https://github.com/emerictrg/todoist_startdate.git"
+        Type: "CODEPIPELINE"
       ServiceRole: !GetAtt "BuilderServiceRole.Arn"
-      Triggers:
-        BuildType: "BUILD"
-        FilterGroups: 
-          - - Type: "EVENT"
-              Pattern: "PUSH"
-            - Type: "HEAD_REF"
-              Pattern: "^refs/heads/main$"
-        Webhook: True
       Visibility: "PRIVATE"
       Tags:
         - Key: "Application"
@@ -130,4 +122,73 @@ Resources:
       Tags:
         - Key: "Application"
           Value: "Todoist start date"
-      
+
+  PipelineRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "codepipeline.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
+        - "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
+      Policies:
+        - PolicyName: "allow-all-lambda-source"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: "s3:*"
+                Resource: "*"
+      RoleName: "todoist-codepipeline-role"
+
+  DeploymentPipeline:
+    Type: "AWS::CodePipeline::Pipeline"
+    Properties:
+      Name: "TodoistCodePipeline"
+      RoleArn: !GetAtt "PipelineRole.Arn"
+      ArtifactStore:
+        Type: "S3"
+        Location: "{{resolve:ssm:TodoistLambdaBucket:2}}"
+      RestartExecutionOnUpdate: False
+      Stages:
+        - Name: "Source"
+          Actions:
+            - ActionTypeId:
+                Category: "Source"
+                Owner: "ThirdParty"
+                Provider: "GitHub"
+                Version: 1
+              Name: "DownloadSource"
+              Configuration:
+                Owner: "emerictrg"
+                Repo: "todoist_startdate"
+                Branch: "main"
+                OAuthToken: "{{resolve:ssm:TodoistgithubAccessToken:2}}"
+              OutputArtifacts:
+                - Name: "todoist-source"
+        - Name: "Build"
+          Actions:
+            - ActionTypeId:
+               Category: "Build"
+               Owner: "AWS"
+               Provider: "CodeBuild"
+               Version: 1
+              Name: "TestAndBuild"
+              Configuration:
+                ProjectName: !Ref "Builder"
+              InputArtifacts:
+                - Name: "todoist-source"
+              OutputArtifacts:
+                - Name: "todist-packaged"
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
+
+

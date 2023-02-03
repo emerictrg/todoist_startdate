@@ -36,3 +36,14 @@ Resources:
         Application: "Todoist start date"
       Value: "temp"
       Type: "String"
+
+  TodoistGithubAccessToken:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      DataType: "text"
+      Description:  "Github Access Token  used by code pipeline to acccess the source code"
+      Name: "TodoistgithubAccessToken"
+      Tags:
+        Application: "Todoist start date"
+      Value: "temp"
+      Type: "String"
