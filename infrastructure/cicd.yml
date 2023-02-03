@@ -86,4 +86,48 @@ Resources:
         - Key: "Application"
           Value: "Todoist start date"
 
+  DeploymentConfig:
+    Type: "AWS::CodeDeploy::DeploymentConfig"
+    Properties:
+      ComputePlatform: "Lambda"
+      DeploymentConfigName: "TodoistStartDateDeploymentConfig"
+      TrafficRoutingConfig:
+        Type: "AllAtOnce"
 
+  DeploymentGroupRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Principal:
+              Service:
+                - "codedeploy.amazonaws.com"
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:  
+        - "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda"
+      RoleName: "todoist-codedeploy-role"
+
+  DeploymentGroup:
+    Type: "AWS::CodeDeploy::DeploymentGroup"
+    Properties:
+      ApplicationName: !Ref "Deployment"
+      AutoRollbackConfiguration:
+        Enabled: True
+        Events:
+          - "DEPLOYMENT_FAILURE"
+          - "DEPLOYMENT_STOP_ON_ALARM"
+          - "DEPLOYMENT_STOP_ON_REQUEST"
+      DeploymentConfigName: !Ref "DeploymentConfig"
+      DeploymentGroupName: "TodoistStartDateDeploymentGroup"
+      # https://stackoverflow.com/questions/52636182/ec2tagfilters-in-deployment-group-for-computeplatform-lambda
+      DeploymentStyle:
+        DeploymentOption: "WITH_TRAFFIC_CONTROL"
+        DeploymentType: "BLUE_GREEN"
+      ServiceRoleArn: !GetAtt "DeploymentGroupRole.Arn"
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
+      
