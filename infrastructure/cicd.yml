@@ -69,60 +69,6 @@ Resources:
         - Key: "Application"
           Value: "Todoist start date"
       
-  Deployment:
-    Type: "AWS::CodeDeploy::Application"
-    Properties:
-      ApplicationName: "TodoistStartDate"
-      ComputePlatform: "Lambda"
-      Tags:
-        - Key: "Application"
-          Value: "Todoist start date"
-
-  DeploymentConfig:
-    Type: "AWS::CodeDeploy::DeploymentConfig"
-    Properties:
-      ComputePlatform: "Lambda"
-      DeploymentConfigName: "TodoistStartDateDeploymentConfig"
-      TrafficRoutingConfig:
-        Type: "AllAtOnce"
-
-  DeploymentGroupRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Principal:
-              Service:
-                - "codedeploy.amazonaws.com"
-            Action:
-              - "sts:AssumeRole"
-      ManagedPolicyArns:  
-        - "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRoleForLambda"
-      RoleName: "todoist-codedeploy-role"
-
-  DeploymentGroup:
-    Type: "AWS::CodeDeploy::DeploymentGroup"
-    Properties:
-      ApplicationName: !Ref "Deployment"
-      AutoRollbackConfiguration:
-        Enabled: True
-        Events:
-          - "DEPLOYMENT_FAILURE"
-          - "DEPLOYMENT_STOP_ON_ALARM"
-          - "DEPLOYMENT_STOP_ON_REQUEST"
-      DeploymentConfigName: !Ref "DeploymentConfig"
-      DeploymentGroupName: "TodoistStartDateDeploymentGroup"
-      # https://stackoverflow.com/questions/52636182/ec2tagfilters-in-deployment-group-for-computeplatform-lambda
-      DeploymentStyle:
-        DeploymentOption: "WITH_TRAFFIC_CONTROL"
-        DeploymentType: "BLUE_GREEN"
-      ServiceRoleArn: !GetAtt "DeploymentGroupRole.Arn"
-      Tags:
-        - Key: "Application"
-          Value: "Todoist start date"
-
   PipelineRole:
     Type: "AWS::IAM::Role"
     Properties:
@@ -186,6 +132,22 @@ Resources:
               InputArtifacts:
                 - Name: "todoist-source"
               OutputArtifacts:
+                - Name: "todoist-packaged"
+        - Name: "DeployStackProduction"
+          Actions:
+            - ActionTypeId:
+                Category: "Deploy"
+                Owner: "AWS"
+                Provider: "CloudFormation"
+                Version: 1
+              Name: "DeployStack"
+              Configuration:
+                ActionMode: "CHANGE_SET_REPLACE"
+                StackName: "TodoistLambdaStack"
+                Capabilities: "CAPABILITY_NAMED_IAM"
+                ChangeSetName: "todoist-pipeline-changes"
+                TemplatePath: "todoist-packaged::infrastructure/lambda.yml"
+              InputArtifacts:
                 - Name: "todoist-packaged"
       Tags:
         - Key: "Application"
