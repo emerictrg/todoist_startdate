@@ -47,3 +47,14 @@ Resources:
         Application: "Todoist start date"
       Value: "temp"
       Type: "String"
+
+  TodoistGithubWebhookSecret:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      DataType: "text"
+      Description:  "Githubi webhook secret key"
+      Name: "TodoistGithubWebhookSecret"
+      Tags:
+        Application: "Todoist start date"
+      Value: "temp"
+      Type: "String"

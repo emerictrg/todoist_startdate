@@ -186,9 +186,24 @@ Resources:
               InputArtifacts:
                 - Name: "todoist-source"
               OutputArtifacts:
-                - Name: "todist-packaged"
+                - Name: "todoist-packaged"
       Tags:
         - Key: "Application"
           Value: "Todoist start date"
+
+  PipelineWebhook:
+    Type: "AWS::CodePipeline::Webhook"
+    Properties: 
+      Authentication: "GITHUB_HMAC"
+      AuthenticationConfiguration: 
+        SecretToken: "{{resolve:ssm:TodoistGithubWebhookSecret:2}}"
+      Filters: 
+        - JsonPath: "$.ref"
+          MatchEquals: "refs/heads/{Branch}"
+      Name: "TodoistGithubWebhook"
+      RegisterWithThirdParty: True
+      TargetAction: "DownloadSource"
+      TargetPipeline: !Ref "DeploymentPipeline"
+      TargetPipelineVersion: !GetAtt "DeploymentPipeline.Version"
 
 
