@@ -24,11 +24,7 @@ phases:
 artifacts:
   files:
     - "dist/*"
+    - "infrastucture/*"
     - "node_modules/*"
   name: "build-$CODEBUILD_BUILD_NUMBER"
-  secondary-artifacts:
-    files:
-      - 'infrastructure/lambda.yml'
-    name: "infra-$CODEBUILD_BUILD_NUMBER"
-    discard-path: 'yes'
 
