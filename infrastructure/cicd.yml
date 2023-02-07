@@ -164,7 +164,7 @@ Resources:
                 Capabilities: "CAPABILITY_NAMED_IAM"
                 ChangeSetName: "todoist-pipeline-changes"
                 TemplatePath: "todoist-packaged::infrastructure/lambda.yml"
-                RoleArn: !GetAtt "CloudformationRole.Arn"
+              RoleArn: !GetAtt "CloudformationRole.Arn"
               InputArtifacts:
                 - Name: "todoist-packaged"
       Tags:
