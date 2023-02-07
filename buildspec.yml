@@ -19,13 +19,13 @@ phases:
     commands:
       - echo build for production
       - npm install --omit=dev
-      - echo list files 
-      - ls
+      - mkdir dist
+      - npm run build
 
 artifacts:
   files:
     - "dist/**/*"
-    - "infrastucture/**/*"
+    - "infrastructure/**/*"
     - "node_modules/**/*"
   name: "build-$CODEBUILD_BUILD_NUMBER"
 

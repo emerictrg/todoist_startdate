@@ -3,6 +3,7 @@
     "watch": "tsc -w",
     "test": "jest --watch",
     "test-all": "jest",
+    "build": "tsc",
     "lint": "eslint --ignore-path .gitignore --ext .ts .",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(ts|json)\""
   },
