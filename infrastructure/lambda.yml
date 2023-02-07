@@ -39,7 +39,7 @@ Resources:
   ReminderLambda:
     Type: "AWS::Lambda::Function"
     Properties:
-      Handler: "index.lambdaHandler"
+      Handler: "dist/index.lambdaHandler"
       Runtime: "nodejs18.x"
       Role: !GetAtt "LambdaExecutionRole.Arn"
       Code:

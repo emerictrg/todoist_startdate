@@ -152,7 +152,7 @@ Resources:
       ArtifactStore:
         Type: "S3"
         Location: !Ref "LambdaSourceBucket"
-      RestartExecutionOnUpdate: True
+      RestartExecutionOnUpdate: False
       Stages:
         - Name: "Source"
           Actions:
@@ -183,20 +183,20 @@ Resources:
                 - Name: "todoist-source"
               OutputArtifacts:
                 - Name: "todoist-packaged"
-        - Name: "DeployStackProduction"
+        - Name: "CreateChangeSetForReview"
           Actions:
             - ActionTypeId:
                 Category: "Deploy"
                 Owner: "AWS"
                 Provider: "CloudFormation"
                 Version: 1
-              Name: "DeployStack"
+              Name: "CreateChangeSet"
               Configuration:
                 ActionMode: "CHANGE_SET_REPLACE"
                 StackName: "TodoistLambdaStack"
                 Capabilities: "CAPABILITY_NAMED_IAM"
                 ChangeSetName: "todoist-pipeline-changes"
-                TemplatePath: "todoist-packaged::lambda.yml"
+                TemplatePath: "todoist-packaged::infrastructure/lambda.yml"
                 RoleArn: !GetAtt "CFExecutionRole.Arn"
                 ParameterOverrides: |
                   {
@@ -205,6 +205,24 @@ Resources:
                   }
               InputArtifacts:
                 - Name: "todoist-packaged"
+        - Name: "Deploy"
+          Actions:
+            - ActionTypeId:
+                Category: "Approval"
+                Owner: "AWS"
+                Provider: "Manual"
+                Version: 1
+              Name: "ApproveChanges"
+            - ActionTypeId:
+                Category: "Deploy"
+                Owner: "AWS"
+                Provider: "CloudFormation"
+                Version: 1
+              Name: "ExecuteChangeSet"
+              Configuration:
+                ActionMode:  "CHANGE_SET_EXECUTE"
+                StackName: "TodoistLambdaStack"
+                ChangeSetName: "todoist-pipeline-changes"
       Tags:
         - Key: "Application"
           Value: "Todoist start date"
