@@ -18,8 +18,8 @@ phases:
 
   post_build:
     commands:
-      - echo POSTBUILD phase
-      - npm prune --omit=dev
+      - echo build for production
+      - npm install --omit=dev
 
 artifacts:
   files:
