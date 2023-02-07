@@ -84,6 +84,7 @@ Resources:
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
         - "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
+        - "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
       Policies:
         - PolicyName: "allow-all-lambda-source"
           PolicyDocument:
@@ -110,23 +111,6 @@ Resources:
         - "arn:aws:iam::aws:policy/IAMFullAccess"
         - "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
         - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-
-  CodePipelineCFExecutionRole:
-    Type: "AWS::IAM::Role"
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: "2012-10-17"
-        Statement:
-          - Effect: "Allow"
-            Principal:
-              Service: 
-                - "codepipeline.amazonaws.com"
-              AWS:
-                - !GetAtt "PipelineRole.Arn"
-            Action:
-              - "sts:AssumeRole"
-      ManagedPolicyArns:
-        - "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
 
   DeploymentPipeline:
     Type: "AWS::CodePipeline::Pipeline"
@@ -181,9 +165,7 @@ Resources:
                 Capabilities: "CAPABILITY_NAMED_IAM"
                 ChangeSetName: "todoist-pipeline-changes"
                 TemplatePath: "todoist-packaged::infrastructure/lambda.yml"
-                # https://github.com/hashicorp/terraform-provider-aws/issues/13121
                 RoleArn: !GetAtt "CFExecutionRole.Arn"
-              RoleArn: !GetAtt "CodePipelineCFExecutionRole.Arn"
               InputArtifacts:
                 - Name: "todoist-packaged"
       Tags:
