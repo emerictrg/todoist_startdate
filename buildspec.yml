@@ -14,12 +14,13 @@ phases:
       - echo Build phase
       - npm install
       - npm run test-all
-      - echo $ACTOR_ACCOUNT_ID
 
   post_build:
     commands:
       - echo build for production
       - npm install --omit=dev
+      - echo list files 
+      - ls
 
 artifacts:
   files:
