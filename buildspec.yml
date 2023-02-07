@@ -26,4 +26,8 @@ artifacts:
     - "dist/*"
     - "node_modules/*"
   name: "build-$CODEBUILD_BUILD_NUMBER"
-  base-directory: '/src'
+  secondary-artifacts:
+    files:
+      - 'infrastructure/lambda.yml'
+    name: "infra-$CODEBUILD_BUILD_NUMBER"
+
