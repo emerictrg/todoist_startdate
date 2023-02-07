@@ -103,7 +103,7 @@ Resources:
           - Effect: "Allow"
             Principal:
               Service: 
-                - "codepipeline.amazonaws.com"
+                - "cloudformation.amazonaws.com"
             Action:
               - "sts:AssumeRole"
       ManagedPolicyArns:
@@ -127,7 +127,6 @@ Resources:
               - "sts:AssumeRole"
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
-
 
   DeploymentPipeline:
     Type: "AWS::CodePipeline::Pipeline"
