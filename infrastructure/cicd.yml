@@ -30,6 +30,7 @@ Resources:
               Service: 
                 - "codepipeline.amazonaws.com"
                 - "codebuild.amazonaws.com"
+                - "cloudformation.amazonaws.com"
 
   ImageRepository:
     Type: "AWS::ECR::Repository"
@@ -113,6 +114,7 @@ Resources:
         - "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
         - "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
         - "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
+        - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
       RoleName: "todoist-codepipeline-role"
 
   CFExecutionRole:
@@ -140,7 +142,7 @@ Resources:
       RoleArn: !GetAtt "PipelineRole.Arn"
       ArtifactStore:
         Type: "S3"
-        Location: "{{resolve:ssm:TodoistLambdaBucket:2}}"
+        Location: !Ref "LambdaSourceBucket"
       RestartExecutionOnUpdate: False
       Stages:
         - Name: "Source"
