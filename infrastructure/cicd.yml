@@ -3,6 +3,34 @@ Description: Todoist start  date project:CICD stack
 
 Resources:
 
+  
+  LambdaSourceBucket:
+    Type: "AWS::S3::Bucket"
+    Properties:
+      BucketName: "{{resolve:ssm:TodoistLambdaBucket:3}}"
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
+
+  LambdaSourceBucketPolicy:
+    Type: "AWS::S3::BucketPolicy"
+    Properties: 
+      Bucket: !Ref "LambdaSourceBucket"
+      PolicyDocument: 
+        Version: "2012-10-17"
+        Statement:
+          - Action: "s3:*"
+            Effect: "Allow"
+            Resource: 
+              - !GetAtt "LambdaSourceBucket.Arn"
+              - !Sub
+                - "${bucketarn}/*"
+                - { "bucketarn": !GetAtt "LambdaSourceBucket.Arn" }
+            Principal:
+              Service: 
+                - "codepipeline.amazonaws.com"
+                - "codebuild.amazonaws.com"
+
   ImageRepository:
     Type: "AWS::ECR::Repository"
     Properties:
@@ -85,14 +113,6 @@ Resources:
         - "arn:aws:iam::aws:policy/AWSCodePipeline_FullAccess"
         - "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
         - "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
-      Policies:
-        - PolicyName: "allow-all-lambda-source"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action: "s3:*"
-                Resource: "*"
       RoleName: "todoist-codepipeline-role"
 
   CFExecutionRole:
@@ -105,6 +125,7 @@ Resources:
             Principal:
               Service: 
                 - "cloudformation.amazonaws.com"
+                - "codepipeline.amazonaws.com"
             Action:
               - "sts:AssumeRole"
       ManagedPolicyArns:
