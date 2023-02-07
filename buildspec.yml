@@ -18,9 +18,9 @@ phases:
   post_build:
     commands:
       - echo build for production
-      - npm install --omit=dev
       - mkdir dist
       - npm run build
+      - npm install --omit=dev
 
 artifacts:
   files:
