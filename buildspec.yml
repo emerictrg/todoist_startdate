@@ -30,4 +30,5 @@ artifacts:
     files:
       - 'infrastructure/lambda.yml'
     name: "infra-$CODEBUILD_BUILD_NUMBER"
+    discard-path: 'yes'
 
