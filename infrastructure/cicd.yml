@@ -213,6 +213,7 @@ Resources:
                 Provider: "Manual"
                 Version: 1
               Name: "ApproveChanges"
+              RunOrder: 1
             - ActionTypeId:
                 Category: "Deploy"
                 Owner: "AWS"
@@ -223,6 +224,7 @@ Resources:
                 ActionMode:  "CHANGE_SET_EXECUTE"
                 StackName: "TodoistLambdaStack"
                 ChangeSetName: "todoist-pipeline-changes"
+              RunOrder: 2
       Tags:
         - Key: "Application"
           Value: "Todoist start date"
