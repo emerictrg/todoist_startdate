@@ -115,6 +115,15 @@ Resources:
         - "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
         - "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
         - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+      Policies:
+        - PolicyName: "allow-pass-role"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              Effect: "Allow"
+              Action:
+                - "iam:PassRole"
+              Resource: "*"
       RoleName: "todoist-codepipeline-role"
 
   CFExecutionRole:
