@@ -196,8 +196,13 @@ Resources:
                 StackName: "TodoistLambdaStack"
                 Capabilities: "CAPABILITY_NAMED_IAM"
                 ChangeSetName: "todoist-pipeline-changes"
-                TemplatePath: "todoist-infra::lambda.yml"
+                TemplatePath: "todoist-packaged::lambda.yml"
                 RoleArn: !GetAtt "CFExecutionRole.Arn"
+                ParameterOverrides: |
+                  {
+                    "LambdaSourceBucket": { "Fn::GetArtifactAtt": [ "todoist-packaged", "BucketName" ] },
+                    "LambdaSourceKey": { "Fn::GetArtifactAtt": [ "todoist-packaged", "ObjectKey" ] }
+                  }
               InputArtifacts:
                 - Name: "todoist-packaged"
       Tags:

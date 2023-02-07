@@ -1,6 +1,16 @@
 AWSTemplateFormatVersion:  "2010-09-09"
 Description:  "Todoist lambda function to catch reminders"
 
+Parameters:
+
+  LambdaSourceBucket:
+    Type: "String"
+    Description:  "Bucket where the code is stored"
+
+  LambdaSourceKey:
+    Type: "String"
+    Description: "Object key for the code in  the LambdaSourceBucket bucket"
+  
 Resources:
   
   LambdaExecutionRole:
@@ -32,7 +42,9 @@ Resources:
       Handler: "index.lambdaHandler"
       Runtime: "nodejs18.x"
       Role: !GetAtt "LambdaExecutionRole.Arn"
-      Code: "./dist/index.js"
+      Code:
+        S3Bucket: !Ref "LambdaSourceBucket"
+        S3Key: !Ref "LambdaSourceKey"
       Tags:
         - Key: "Application"
           Value: "Todoist start date"
