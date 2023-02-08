@@ -183,16 +183,16 @@ Resources:
                 - Name: "todoist-source"
               OutputArtifacts:
                 - Name: "todoist-packaged"
-        - Name: "CreateChangeSetForReview"
+        - Name: "DeployInProduction"
           Actions:
             - ActionTypeId:
                 Category: "Deploy"
                 Owner: "AWS"
                 Provider: "CloudFormation"
                 Version: 1
-              Name: "CreateChangeSet"
+              Name: "DeployProduction"
               Configuration:
-                ActionMode: "CHANGE_SET_REPLACE"
+                ActionMode: "CREATE_UPDATE"
                 StackName: "TodoistLambdaStack"
                 Capabilities: "CAPABILITY_NAMED_IAM"
                 ChangeSetName: "todoist-pipeline-changes"
@@ -205,26 +205,6 @@ Resources:
                   }
               InputArtifacts:
                 - Name: "todoist-packaged"
-        - Name: "Deploy"
-          Actions:
-            - ActionTypeId:
-                Category: "Approval"
-                Owner: "AWS"
-                Provider: "Manual"
-                Version: 1
-              Name: "ApproveChanges"
-              RunOrder: 1
-            - ActionTypeId:
-                Category: "Deploy"
-                Owner: "AWS"
-                Provider: "CloudFormation"
-                Version: 1
-              Name: "ExecuteChangeSet"
-              Configuration:
-                ActionMode:  "CHANGE_SET_EXECUTE"
-                StackName: "TodoistLambdaStack"
-                ChangeSetName: "todoist-pipeline-changes"
-              RunOrder: 2
       Tags:
         - Key: "Application"
           Value: "Todoist start date"
