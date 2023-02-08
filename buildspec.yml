@@ -14,6 +14,7 @@ phases:
       - echo Build phase
       - npm install
       - npm run test-all
+      - npm run lint
 
   post_build:
     commands:
