@@ -143,6 +143,15 @@ Resources:
         - "arn:aws:iam::aws:policy/IAMFullAccess"
         - "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
         - "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+      Policies:
+        - PolicyName: "allow-parameter-store"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: 
+                  - "ssm:GetParameters"
+                Resource: "*"
 
   DeploymentPipeline:
     Type: "AWS::CodePipeline::Pipeline"
