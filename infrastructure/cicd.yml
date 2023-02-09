@@ -176,6 +176,7 @@ Resources:
                 Repo: "todoist_startdate"
                 Branch: "main"
                 OAuthToken: "{{resolve:ssm:TodoistgithubAccessToken:2}}"
+                PollForSourceChanges: False
               OutputArtifacts:
                 - Name: "todoist-source"
         - Name: "Build"

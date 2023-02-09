@@ -34,19 +34,19 @@ type ReminderEventBody = {
   version: string;
 };
 type ReminderExpectedEvent = {
-  body: Partial<ReminderEventBody>;
+  body: string;
 };
 
 export const lambdaHandler = async (event: ReminderExpectedEvent) => {
-  if (event.body.event_data === undefined) {
-    console.log(event);
+  const body: Partial<ReminderEventBody> = JSON.parse(event.body);
+  if (body.event_data === undefined) {
     throw new Error("no data provided");
   }
 
   const api = new TodoistApi(Config.getTodoistAccessToken());
   const tasksProvider = new TasksProvider(api);
   const todoistTasks: ITask[] = await tasksProvider.fetchTasks(
-    event.body.event_data.item_id
+    body.event_data.item_id
   );
   const usecase: MakeTasksVisible = new MakeTasksVisible(
     new TodoistGateway(api)
