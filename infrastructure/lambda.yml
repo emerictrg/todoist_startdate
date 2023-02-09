@@ -10,7 +10,7 @@ Parameters:
   LambdaSourceKey:
     Type: "String"
     Description: "Object key for the code in  the LambdaSourceBucket bucket"
-  
+
 Resources:
   
   LambdaExecutionRole:
@@ -65,4 +65,32 @@ Resources:
       Action: "lambda:InvokeFunctionUrl"
       Principal: "*"
       FunctionUrlAuthType: "NONE"
+
+  LambdaCDN:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfiguration:
+        Aliases:
+          - "*.trang.ninja"
+        Comment: "Allow to add a domain name in front of the todoist lambda url"
+        Origins:
+          - Id: "TodoistLambdaURL"
+            DomainName: !GetAtt "ReminderLambdaURL.FunctionUrl"
+            CustomOriginCConfig:
+              OriginProtocolPolicy: "https-only"
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - "GET"
+            - "HEAD"
+            - "OPTIONS"
+            - "PUT"
+            - "PATCH"
+            - "POST"
+            - "DELETE"
+          TargetOriginId: "TodoistLambdaURL"
+          ViewerProtocolPolicy: "https-only"
+        Enabled: True
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
       
