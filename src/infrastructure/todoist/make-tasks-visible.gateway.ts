@@ -1,4 +1,4 @@
-import { TodoistApi } from "@doist/todoist-api-typescript";
+import { TodoistApi, TodoistRequestError } from "@doist/todoist-api-typescript";
 import { Task } from "../../domain/entities/task";
 import {
   DataGateway,
@@ -25,8 +25,19 @@ export class TodoistGateway implements DataGateway {
       .then(() => {
         return new TodoistGatewayResponse(true);
       })
-      .catch(() => {
-        return new TodoistGatewayResponse(false);
+      .catch((error: TodoistRequestError) => {
+        const messages: string[] = [];
+        if (error.isAuthenticationError()) {
+          messages.push("authentication error");
+          if (error.httpStatusCode) {
+            messages.push(error.httpStatusCode.toString());
+          }
+        } else if (error.message !== undefined) {
+          messages.push(error.message.toString());
+        } else {
+          messages.push("error unknown");
+        }
+        return new TodoistGatewayResponse(false, messages);
       });
   }
 }

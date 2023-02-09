@@ -43,7 +43,7 @@ export class MakeTasksVisible implements DrivingPort {
       response.activatedTasks
     );
     if (!gatewayResponse.isSuccessfull) {
-      throw new Error("tasks was not activated properly on save");
+      throw new Error(gatewayResponse.messages.join("/"));
     }
     return Promise.resolve(response);
   }

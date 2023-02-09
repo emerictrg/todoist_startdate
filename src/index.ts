@@ -56,7 +56,7 @@ export const lambdaHandler = async (event: ReminderExpectedEvent) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: presenter.toString().join(','),
+      message: presenter.toString().join(","),
     }),
   };
 };
