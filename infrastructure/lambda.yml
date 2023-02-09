@@ -45,6 +45,9 @@ Resources:
       Code:
         S3Bucket: !Ref "LambdaSourceBucket"
         S3Key: !Ref "LambdaSourceKey"
+      Environment:
+        Variables:
+          TODOIST_ACCESS_TOKEN: "{{resolve:ssm:TodoistAccessToken:2}}"
       Tags:
         - Key: "Application"
           Value: "Todoist start date"
