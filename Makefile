@@ -25,6 +25,9 @@ tdd:
 tests:
 	$(DOCKER_RUN) --env GIT_WORK_TREE=$(GIT_WORK_TREE) --env GIT_DIR=$(GIT_DIR) $(IMAGE) npm run test-all
 
+tags:
+	ctags -R --exclude=node_modules --exclude=dist .
+
 clean:
 	rm -rf dist/*
 
