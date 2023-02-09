@@ -39,6 +39,7 @@ type ReminderExpectedEvent = {
 
 export const lambdaHandler = async (event: ReminderExpectedEvent) => {
   if (event.body.event_data === undefined) {
+    console.log(event);
     throw new Error("no data provided");
   }
 
