@@ -3,7 +3,7 @@ import * as controller from "./make-tasks-visible.controller";
 
 const getMockedUseCase = (): interactor.DrivingPort => {
   return {
-    changeVisibility: jest.fn((_: interactor.RequestModel) => {
+    changeVisibility: jest.fn(() => {
       return Promise.resolve(new interactor.ResponseModel());
     }),
   };

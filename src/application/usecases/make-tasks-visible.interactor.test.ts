@@ -3,7 +3,7 @@ import { Task } from "../../domain/entities/task";
 
 const getMockedGateway = (isSuccessfull = true): interactor.DataGateway => {
   return {
-    saveState: jest.fn((_: Task[]) => {
+    saveState: jest.fn(() => {
       const response: interactor.DataGatewayResponse = {
         isSuccessfull: isSuccessfull,
         messages: [],

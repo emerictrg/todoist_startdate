@@ -25,6 +25,10 @@ export interface DrivingPort {
   changeVisibility(request: RequestModel): Promise<ResponseModel>;
 }
 
+export interface Presenter {
+    response: ResponseModel;
+}
+
 export class MakeTasksVisible implements DrivingPort {
   constructor(public gateway: DataGateway) {}
 

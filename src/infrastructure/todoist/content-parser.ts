@@ -3,8 +3,7 @@ export class TodoistContentParser {
     const expression = /filter:\((.+)\)/;
     const matches: RegExpMatchArray | null = content.match(expression);
     if (matches !== null) {
-      let group: string;
-      [, group] = matches;
+      const [, group] = matches;
       if (group !== "") {
         return group;
       }
