@@ -4,6 +4,7 @@ import { TasksProvider } from "./infrastructure/todoist/tasks-provider";
 import { TodoistGateway } from "./infrastructure/todoist/make-tasks-visible.gateway";
 import { ITask } from "./domain/entities/task";
 import { ItaskToTaskAdapter } from "./application/adapters/make-tasks-visible.controller";
+import { TasksToString } from "./application/adapters/make-tasks-visible.tostring.presenter";
 import { MakeTasksVisible } from "./application/usecases/make-tasks-visible.interactor";
 
 type ReminderEventBody = {
@@ -51,10 +52,11 @@ export const lambdaHandler = async (event: ReminderExpectedEvent) => {
   );
   const adapter: ItaskToTaskAdapter = new ItaskToTaskAdapter(usecase);
   const response = await adapter.handle(todoistTasks);
+  const presenter = new TasksToString(response);
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: "hello world",
+      message: presenter.toString().join(','),
     }),
   };
 };

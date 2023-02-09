@@ -26,7 +26,7 @@ export interface DrivingPort {
 }
 
 export interface Presenter {
-    response: ResponseModel;
+  response: ResponseModel;
 }
 
 export class MakeTasksVisible implements DrivingPort {

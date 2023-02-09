@@ -53,19 +53,3 @@ update-parameters-stack:
 	$(AWSCLI) cloudformation update-stack --stack-name TodoistParametersStack \
 		--template-body file://infrastructure/parameters-store.yml
 	
-
-create-lambda-stack: infrastructure/packaged-lambda.yml
-	$(AWSCLI) cloudformation create-stack --stack-name TodoistLambdaStack \
-		--template-body file://infrastructure/packaged-lambda.yml \
-		--capabilities CAPABILITY_NAMED_IAM
-
-update-lambda-stack: infrastructure/packaged-lambda.yml
-	$(AWSCLI) cloudformation update-stack --stack-name TodoistLambdaStack \
-		--template-body file://infrastructure/packaged-lambda.yml \
-		--capabilities CAPABILITY_NAMED_IAM
-
-infrastructure/packaged-lambda.yml: infrastructure/lambda.yml dist/index.js
-	$(AWSCLI) cloudformation package --template-file ./infrastructure/lambda.yml \
-		--s3-bucket $(BucketLambdaSource) \
-		--output-template-file ./infrastructure/packaged-lambda.yml
-
