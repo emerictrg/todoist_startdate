@@ -28,6 +28,9 @@ tests:
 tags:
 	ctags -R --exclude=node_modules --exclude=dist .
 
+cfn-lint:
+	docker run -it --rm -v $(PWD):/data -w /data cfn-python-lint:latest cloud/*.yml
+
 clean:
 	rm -rf dist/*
 

@@ -76,7 +76,7 @@ Resources:
         Origins:
           - Id: "TodoistLambdaURL"
             DomainName: !GetAtt "ReminderLambdaURL.FunctionUrl"
-            CustomOriginCConfig:
+            CustomOriginConfig:
               OriginProtocolPolicy: "https-only"
         DefaultCacheBehavior:
           AllowedMethods:
