@@ -82,7 +82,6 @@ Resources:
                 - !GetAtt "ReminderLambdaURL.FunctionUrl"
             CustomOriginConfig:
               OriginProtocolPolicy: "https-only"
-            CachePolicyId: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
         DefaultCacheBehavior:
           AllowedMethods:
             - "GET"
@@ -94,6 +93,7 @@ Resources:
             - "DELETE"
           TargetOriginId: "TodoistLambdaURL"
           ViewerProtocolPolicy: "https-only"
+          CachePolicyId: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
         Enabled: True
       Tags:
         - Key: "Application"
