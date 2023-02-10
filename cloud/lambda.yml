@@ -75,7 +75,11 @@ Resources:
         Comment: "Allow to add a domain name in front of the todoist lambda url"
         Origins:
           - Id: "TodoistLambdaURL"
-            DomainName: !GetAtt "ReminderLambdaURL.FunctionUrl"
+            DomainName: !Select
+              - 2
+              - !Split
+                - "/"
+                - !GetAtt "ReminderLambdaURL.FunctionUrl"
             CustomOriginConfig:
               OriginProtocolPolicy: "https-only"
         DefaultCacheBehavior:
