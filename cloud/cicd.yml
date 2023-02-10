@@ -206,7 +206,7 @@ Resources:
                 StackName: "TodoistLambdaStack"
                 Capabilities: "CAPABILITY_NAMED_IAM"
                 ChangeSetName: "todoist-pipeline-changes"
-                TemplatePath: "todoist-packaged::infrastructure/lambda.yml"
+                TemplatePath: "todoist-packaged::cloud/lambda.yml"
                 RoleArn: !GetAtt "CFExecutionRole.Arn"
                 ParameterOverrides: |
                   {

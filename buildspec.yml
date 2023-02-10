@@ -26,7 +26,7 @@ phases:
 artifacts:
   files:
     - "dist/**/*"
-    - "infrastructure/**/*"
+    - "cloud/**/*"
     - "node_modules/**/*"
   name: "build-$CODEBUILD_BUILD_NUMBER"
 
