@@ -33,12 +33,12 @@ clean:
 
 create-cicd-stack:
 	$(AWSCLI) cloudformation create-stack --stack-name TodoistCICD \
-		--template-body file://infrastructure/cicd.yml \
+		--template-body file://cloud/cicd.yml \
 		--capabilities CAPABILITY_NAMED_IAM
 
 update-cicd-stack:
 	$(AWSCLI) cloudformation update-stack --stack-name TodoistCICD \
-		--template-body file://infrastructure/cicd.yml \
+		--template-body file://cloud/cicd.yml \
 		--capabilities CAPABILITY_NAMED_IAM
 
 log-to-ecr:
@@ -47,9 +47,9 @@ log-to-ecr:
 
 create-parameters-stack:
 	$(AWSCLI) cloudformation create-stack --stack-name TodoistParametersStack \
-		--template-body file://infrastructure/parameters-store.yml
+		--template-body file://cloud/parameters-store.yml
 		
 update-parameters-stack:
 	$(AWSCLI) cloudformation update-stack --stack-name TodoistParametersStack \
-		--template-body file://infrastructure/parameters-store.yml
+		--template-body file://cloud/parameters-store.yml
 	
