@@ -69,7 +69,7 @@ Resources:
   LambdaCDN:
     Type: "AWS::CloudFront::Distribution"
     Properties:
-      DistributionConfiguration:
+      DistributionConfig:
         Aliases:
           - "*.trang.ninja"
         Comment: "Allow to add a domain name in front of the todoist lambda url"
