@@ -159,7 +159,7 @@ Resources:
             Statement:
               - Effect: "Allow"
                 Action: 
-                  - "route53:GetHostedZone"
+                  - "route53:*"
                 Resource: "*"
 
 
