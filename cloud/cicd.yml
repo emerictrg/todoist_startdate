@@ -153,6 +153,15 @@ Resources:
                 Action: 
                   - "ssm:GetParameters"
                 Resource: "*"
+        - PolicyName: "get-record-info"
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: "Allow"
+                Action: 
+                  - "route53:GetHostedZone"
+                Resource: "*"
+
 
   DeploymentPipeline:
     Type: "AWS::CodePipeline::Pipeline"
