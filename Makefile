@@ -5,7 +5,9 @@ CONTAINER_ROOT=/home/node/src
 DOCKER_RUN=docker run -it --rm -v $(PWD):$(CONTAINER_ROOT) -w $(CONTAINER_ROOT) -u node 
 IMAGE=todoist
 CMD=$(DOCKER_RUN) $(IMAGE)
-AWSCLI=docker run -it --rm -v $(PWD):/src -w /src -v $(PWD)/aws:/root/.aws amazon/aws-cli
+AWSCLI_DOCKER=docker run -it --rm -v $(PWD):/src -w /src -v $(PWD)/aws:/root/.aws
+AWSCLI_IMG=amazon/aws-cli
+AWSCLI=$(AWSCLI_DOCKER) $(AWSCLI_IMG)
 
 build:
 	docker build --rm --no-cache . -t todoist
@@ -56,3 +58,9 @@ update-parameters-stack:
 	$(AWSCLI) cloudformation update-stack --stack-name TodoistParametersStack \
 		--template-body file://cloud/parameters-store.yml
 	
+deploy-cert:
+	$(AWSCLI) cloudformation deploy \
+		--region=us-east-1 \
+		--stack-name todoist-cert \
+		--parameter-overrides DomainName=$(CERT_DOMAIN_NAME) HostedZone=$(CERT_HOSTED_ZONE) \
+		--template-file ./cloud/virginia-certificate.yml

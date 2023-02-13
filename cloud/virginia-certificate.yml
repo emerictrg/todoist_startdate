@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion:  "2010-09-09"
+Description:  "Todoist certificate in virginia to enabled the CDN"
+
+Parameters:
+
+  DomainName:
+    Type: "String"
+    Description: "FQDN used for the certificate"
+
+  HostedZone:
+    Type: "String"
+    Description: "Hosted Zone ID related to the domain name and used for validation"
+
+
+Resources:
+
+  Certificate:
+    Type: "AWS::CertificateManager::Certificate"
+    Properties:
+      CertificateTransparencyLoggingPreference: "DISABLED"
+      DomainName: !Sub
+        - "*.${Domain}"
+        - Domain: !Ref "DomainName"
+      ValidationMethod: "DNS"
+      DomainValidationOptions:
+        - DomainName: !Ref "DomainName"
+          HostedZoneId: !Ref "HostedZone"
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
+
