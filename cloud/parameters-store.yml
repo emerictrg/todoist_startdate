@@ -64,7 +64,7 @@ Resources:
     Properties:
       DataType: "text"
       Description:  "Virginia certificate ARN. Cannot use ImportValue cross region"
-      Name: "VirginiaCert"
+      Name: "TodoistVirginiaCert"
       Tags:
         Application: "Todoist start date"
       Value: "temp"
