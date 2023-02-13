@@ -29,3 +29,11 @@ Resources:
         - Key: "Application"
           Value: "Todoist start date"
 
+Outputs:
+    CertARN:
+      Description: "Certificate ARN"
+      Value: !Ref "Certificate"
+      Export: 
+        Name: !Sub "${AWS::StackName}:Arn"
+
+

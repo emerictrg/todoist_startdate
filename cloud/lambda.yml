@@ -66,36 +66,39 @@ Resources:
       Principal: "*"
       FunctionUrlAuthType: "NONE"
 
-#  LambdaCDN:
-#    Type: "AWS::CloudFront::Distribution"
-#    Properties:
-#      DistributionConfig:
-#        Aliases:
-#          - "*.trang.ninja"
-#        Comment: "Allow to add a domain name in front of the todoist lambda url"
-#        Origins:
-#          - Id: "TodoistLambdaURL"
-#            DomainName: !Select
-#              - 2
-#              - !Split
-#                - "/"
-#                - !GetAtt "ReminderLambdaURL.FunctionUrl"
-#            CustomOriginConfig:
-#              OriginProtocolPolicy: "https-only"
-#        DefaultCacheBehavior:
-#          AllowedMethods:
-#            - "GET"
-#            - "HEAD"
-#            - "OPTIONS"
-#            - "PUT"
-#            - "PATCH"
-#            - "POST"
-#            - "DELETE"
-#          TargetOriginId: "TodoistLambdaURL"
-#          ViewerProtocolPolicy: "https-only"
-#          CachePolicyId: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
-#        Enabled: True
-#      Tags:
-#        - Key: "Application"
-#          Value: "Todoist start date"
+  LambdaCDN:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - "*.trang.ninja"
+        Comment: "Allow to add a domain name in front of the todoist lambda url"
+        Origins:
+          - Id: "TodoistLambdaURL"
+            DomainName: !Select
+              - 2
+              - !Split
+                - "/"
+                - !GetAtt "ReminderLambdaURL.FunctionUrl"
+            CustomOriginConfig:
+              OriginProtocolPolicy: "https-only"
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - "GET"
+            - "HEAD"
+            - "OPTIONS"
+            - "PUT"
+            - "PATCH"
+            - "POST"
+            - "DELETE"
+          TargetOriginId: "TodoistLambdaURL"
+          ViewerProtocolPolicy: "https-only"
+          CachePolicyId: "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+        ViewerCertificate: 
+          AcmCertificateArn: !ImportValue "todoist-cert:Arn" 
+          SslSupportMethod: "sni-only"
+        Enabled: True
+      Tags:
+        - Key: "Application"
+          Value: "Todoist start date"
       
