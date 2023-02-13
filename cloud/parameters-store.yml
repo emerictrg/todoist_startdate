@@ -58,3 +58,14 @@ Resources:
         Application: "Todoist start date"
       Value: "temp"
       Type: "String"
+
+  VirginiaCertificate:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      DataType: "text"
+      Description:  "Virginia certificate ARN. Cannot use ImportValue cross region"
+      Name: "VirginiaCert"
+      Tags:
+        Application: "Todoist start date"
+      Value: "temp"
+      Type: "String"
