@@ -111,6 +111,7 @@ Resources:
       Comment: "Route to todoist project"
       HostedZoneId: !ImportValue "PersonalDomain:HostedZoneId"
       Name: "{{resolve:ssm:TodoistSubDomain:2}}"
+      Type: "A"
 
 
 
