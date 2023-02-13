@@ -102,3 +102,15 @@ Resources:
         - Key: "Application"
           Value: "Todoist start date"
       
+  SubDomainRecord:
+    Type: "AWS::Route53::RecordSet"
+    Properties:
+      AliasTarget:
+        DNSName: !GetAtt "LambdaCDN.DomainName"
+        HostedZoneId: "Z2FDTNDATAQYW2"
+      Comment: "Route to todoist project"
+      HostedZoneId: !ImportValue "PersonalDomain:HostedZoneId"
+      Name: "{{resolve:ssm:PersonalDomain:HostedZoneId:2}}"
+
+
+

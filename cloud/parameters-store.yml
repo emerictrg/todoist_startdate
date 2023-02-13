@@ -69,3 +69,15 @@ Resources:
         Application: "Todoist start date"
       Value: "temp"
       Type: "String"
+
+  TodoistSubdomainName:
+    Type: "AWS::SSM::Parameter"
+    Properties:
+      DataType: "text"
+      Description:  "dub domain linked to the app"
+      Name: "TodoistSubDomain"
+      Tags:
+        Application: "Todoist start date"
+      Value: "temp"
+      Type: "String"
+
